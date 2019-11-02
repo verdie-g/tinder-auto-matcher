@@ -74,6 +74,11 @@ namespace Tinder
             await Get<Pass>("pass/" + userId);
         }
 
+        public async Task Unmatch(string matchId)
+        {
+            await Delete<UnmatchResponse>("user/matches/" + matchId);
+        }
+
         public async Task<Profile> GetProfile()
         {
             var res = await Get<ProfileResponse>("profile");
@@ -97,6 +102,11 @@ namespace Tinder
             var jsonPayload = JsonSerializer.Serialize(payload);
             msg.Content = new StringContent(jsonPayload);
             return Send<TResponse>(msg);
+        }
+
+        private Task<TResponse> Delete<TResponse>(string requestUri)
+        {
+            return Send<TResponse>(new HttpRequestMessage(HttpMethod.Delete, requestUri));
         }
 
         private async Task<TResponse> Send<TResponse>(HttpRequestMessage msg)
