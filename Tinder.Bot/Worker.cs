@@ -28,7 +28,7 @@ namespace Tinder.Bot
             await foreach (var rec in GetTeasedRecommendations(client))
             {
                 var like = await client.Like(rec.UserInfo.Id);
-                if (like.Match)
+                if (like.Match != null)
                     Console.WriteLine("You matched " + rec.UserInfo.Name);
                 else
                     Console.WriteLine("Error");

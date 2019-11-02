@@ -20,7 +20,7 @@ namespace Tinder.Models
 
     public class Match
     {
-        [JsonPropertyName("id")]
+        [JsonPropertyName("_id")]
         public string Id { get; set; }
         [JsonPropertyName("seen")]
         public Seen SeenInfo { get; set; }
