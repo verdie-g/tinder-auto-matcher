@@ -25,7 +25,10 @@ namespace Tinder
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Token", authToken);
         }
 
-        public async Task<IEnumerable<Recommendation>> GetRecommendations()
+        /// <summary>
+        /// Get recommendations for you or null if there is none.
+        /// </summary>
+        public async Task<IReadOnlyList<Recommendation>> GetRecommendations()
         {
             var res = await Get<RecommendationResponse>("v2/recs/core");
             return res.Data.Results;
@@ -37,7 +40,7 @@ namespace Tinder
             return res.Data;
         }
 
-        public async Task<IEnumerable<Teaser>> GetTeasers()
+        public async Task<IReadOnlyList<Teaser>> GetTeasers()
         {
             var res = await Get<TeasersResponse>("v2/fast-match/teasers");
             return res.Data.Results;
@@ -120,6 +123,7 @@ namespace Tinder
                 {
                     throw new TinderAuthenticationException("Invalid or expired token");
                 }
+
                 throw new TinderException(json);
             }
 

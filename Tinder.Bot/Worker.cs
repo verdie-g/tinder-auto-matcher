@@ -25,13 +25,14 @@ namespace Tinder.Bot
         {
             var authToken = _config.GetValue<string>("TinderClient:Token"); // X-Auth-Token
             var client = new TinderClient(authToken);
-            await foreach (var rec in GetTeasedRecommendations(client))
+
+            await foreach (var teasedRec in GetTeasedRecommendations(client))
             {
-                var like = await client.Like(rec.UserInfo.Id);
+                var like = await client.Like(teasedRec.UserInfo.Id);
                 if (like.Match != null)
-                    Console.WriteLine("You matched " + rec.UserInfo.Name);
+                    _logger.LogInformation("You matched " + teasedRec.UserInfo.Name);
                 else
-                    Console.WriteLine("Error");
+                    _logger.LogError($"{teasedRec.UserInfo.Name} ({teasedRec.UserInfo.Id}) was not a match");
             }
         }
 
@@ -39,36 +40,63 @@ namespace Tinder.Bot
         {
             throttling ??= TimeSpan.FromMilliseconds(1000);
 
-            var teasers = await client.GetTeasers();
-            var teaserPhotoIds = teasers
-                .SelectMany(t => t.User.Photos)
-                .Select(photo => photo.Id)
-                .ToHashSet();
-
-            await foreach (var rec in GetRecommendationsStream(client))
+            while (true)
             {
-                if (rec.UserInfo.Photos.Any(photo => teaserPhotoIds.Contains(photo.Id)))
+                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(client);
+                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(client, throttling.Value, teaserPhotoIds))
                 {
-                    yield return rec;
+                    yield return teasedRec;
                 }
-                else
-                {
-                    await client.Pass(rec.UserInfo.Id);
-                    Console.WriteLine("Pass " + rec.UserInfo.Name);
-                }
-                await Task.Delay(throttling.Value);
+
+                _logger.LogDebug("No teased recommendations were found in the last recommendations set. Refreshing teaser list");
             }
         }
 
-        private async IAsyncEnumerable<Recommendation> GetRecommendationsStream(TinderClient client)
+        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendationsWhileOneAppears(TinderClient client, TimeSpan throttling,
+            ISet<string> teaserPhotoIds)
         {
-            while (true)
+            bool matchOccuredInSet = true;
+            while (matchOccuredInSet)
             {
-                foreach (var rec in await client.GetRecommendations())
+                var recs = await GetRecommendations(client);
+
+                foreach (var rec in recs)
                 {
-                    yield return rec;
+                    if (rec.UserInfo.Photos.Any(photo => teaserPhotoIds.Contains(photo.Id)))
+                    {
+                        matchOccuredInSet = true;
+                        yield return rec;
+                    }
+                    else
+                    {
+                        _logger.LogDebug("Pass " + rec.UserInfo.Name);
+                        await client.Pass(rec.UserInfo.Id);
+                    }
+
+                    await Task.Delay(throttling);
                 }
             }
+        }
+
+        private async Task<ISet<string>> GetTeaserPhotoIds(TinderClient client)
+        {
+            var teasers = await client.GetTeasers();
+            return teasers
+                .SelectMany(t => t.User.Photos)
+                .Select(photo => photo.Id)
+                .ToHashSet();
+        }
+
+        private async Task<IReadOnlyList<Recommendation>> GetRecommendations(TinderClient client)
+        {
+            IReadOnlyList<Recommendation> recs = null;
+            while ((recs = await client.GetRecommendations()) == null)
+            {
+                _logger.LogDebug("No more recommendations. Retrying in a minute");
+                await Task.Delay(TimeSpan.FromMinutes(1));
+            }
+
+            return recs;
         }
     }
 }

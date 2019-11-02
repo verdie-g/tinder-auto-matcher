@@ -15,6 +15,9 @@ namespace Tinder.Models
     public class RecommendationResponseData
     {
         [JsonPropertyName("results")]
+        /// <summary>
+        /// Can be null if there is no more recommendations.
+        /// </summary>
         public IReadOnlyList<Recommendation> Results { get; set; }
     }
 
