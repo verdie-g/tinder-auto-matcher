@@ -6,5 +6,6 @@ namespace Tinder.Exceptions
     {
         public TinderException() { }
         public TinderException(string message) : base(message) { }
+        public TinderException(string message, Exception inner) : base(message, inner) { }
     }
 }

@@ -1,8 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.IO;
+using System.Net;
 using System.Net.Http;
-using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
 using Tinder.Exceptions;
@@ -82,13 +81,30 @@ namespace Tinder
             return res;
         }
 
-        private async Task<TResponse> Get<TResponse>(string requestUri)
+        private Task<TResponse> Get<TResponse>(string requestUri)
         {
-            var res = await _httpClient.GetAsync(requestUri);
+            return Send<TResponse>(new HttpRequestMessage(HttpMethod.Get, requestUri));
+        }
+
+        private Task<TResponse> Post<TRequest, TResponse>(string requestUri, TRequest payload)
+        {
+            var msg = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var jsonPayload = JsonSerializer.Serialize(payload);
+            msg.Content = new StringContent(jsonPayload);
+            return Send<TResponse>(msg);
+        }
+
+        private async Task<TResponse> Send<TResponse>(HttpRequestMessage msg)
+        {
+            var res = await _httpClient.SendAsync(msg);
             var json = await res.Content.ReadAsStringAsync();
 
             if (!res.IsSuccessStatusCode)
             {
+                if (res.StatusCode == HttpStatusCode.Unauthorized)
+                {
+                    throw new TinderAuthenticationException("Invalid or expired token");
+                }
                 throw new TinderException(json);
             }
 
@@ -96,31 +112,9 @@ namespace Tinder
             {
                 return JsonSerializer.Deserialize<TResponse>(json);
             }
-            catch (Exception)
+            catch (Exception e)
             {
-                throw new TinderException(json);
-            }
-        }
-
-        private async Task<TResponse> Post<TRequest, TResponse>(string requestUri, TRequest payload)
-        {
-            var jsonPayload = JsonSerializer.Serialize(payload);
-            var res = await _httpClient.PostAsync(requestUri, new StringContent(jsonPayload));
-            var jsonResponse = await res.Content.ReadAsStringAsync();
-
-            if (!res.IsSuccessStatusCode)
-            {
-                // status: int + error: string
-                throw new TinderException(jsonResponse);
-            }
-
-            try
-            {
-                return JsonSerializer.Deserialize<TResponse>(jsonResponse);
-            }
-            catch (Exception)
-            {
-                throw new TinderException(jsonResponse);
+                throw new TinderSerializationException($"Couldn't deserialize response: ${json}", e);
             }
         }
     }
