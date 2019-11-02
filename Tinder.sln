@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.26124.0
 MinimumVisualStudioVersion = 15.0.26124.0
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder", "Tinder\Tinder.csproj", "{80D97269-424B-4CF5-BB1A-C3029450390C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.Bot", "Tinder.Bot\Tinder.Bot.csproj", "{113E4B79-2FB4-4C05-A2E9-4E36875C87C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tinder.AutoMatcher", "Tinder.AutoMatcher\Tinder.AutoMatcher.csproj", "{113E4B79-2FB4-4C05-A2E9-4E36875C87C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

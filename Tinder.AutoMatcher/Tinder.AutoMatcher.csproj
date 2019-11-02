@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.0</TargetFramework>
-    <UserSecretsId>dotnet-Tinder.Bot-3106A64F-E48B-41CE-94A1-693E808C5697</UserSecretsId>
+    <UserSecretsId>dotnet-Tinder.AutoMatcher-3106A64F-E48B-41CE-94A1-693E808C5697</UserSecretsId>
   </PropertyGroup>
 
   <ItemGroup>

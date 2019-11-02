@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 
-namespace Tinder.Bot
+namespace Tinder.AutoMatcher
 {
     public class Program
     {

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tinder.Models;
 
-namespace Tinder.Bot
+namespace Tinder.AutoMatcher
 {
     public class Worker : BackgroundService
     {
