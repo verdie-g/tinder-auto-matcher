@@ -98,7 +98,7 @@ namespace Tinder
 
         private Task<TResponse> Post<TRequest, TResponse>(string requestUri, TRequest payload)
         {
-            var msg = new HttpRequestMessage(HttpMethod.Get, requestUri);
+            var msg = new HttpRequestMessage(HttpMethod.Post, requestUri);
             var jsonPayload = JsonSerializer.Serialize(payload);
             msg.Content = new StringContent(jsonPayload);
             return Send<TResponse>(msg);
