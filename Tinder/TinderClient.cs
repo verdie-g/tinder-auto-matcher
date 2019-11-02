@@ -10,7 +10,7 @@ using Tinder.Models;
 
 namespace Tinder
 {
-    public class TinderClient
+    public class TinderClient : ITinderClient
     {
         private readonly HttpClient _httpClient;
 
@@ -26,9 +26,6 @@ namespace Tinder
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Token", authToken);
         }
 
-        /// <summary>
-        /// Get recommendations for you or null if there is none.
-        /// </summary>
         public async Task<IReadOnlyList<Recommendation>> GetRecommendations(CancellationToken cancellationToken = default)
         {
             var res = await Get<RecommendationResponse>("v2/recs/core", cancellationToken);
@@ -53,14 +50,14 @@ namespace Tinder
             return res.Data.Matches;
         }
 
-        public async Task Message(string userId, string message, CancellationToken cancellationToken = default)
-        {
-            await Post<MessageRequest, MessageResponse>("user/matches/" + userId, new MessageRequest { Message = message }, cancellationToken);
-        }
-
         public async Task Ping(Geolocation geolocation, CancellationToken cancellationToken = default)
         {
             await Post<Geolocation, PingResponse>("user/ping", geolocation, cancellationToken);
+        }
+
+        public async Task Message(string userId, string message, CancellationToken cancellationToken = default)
+        {
+            await Post<MessageRequest, MessageResponse>("user/matches/" + userId, new MessageRequest { Message = message }, cancellationToken);
         }
 
         public async Task Travel(Geolocation geolocation, CancellationToken cancellationToken = default)
