@@ -49,6 +49,11 @@ namespace Tinder
             return res.Data.Matches;
         }
 
+        public async Task Message(string userId, string message)
+        {
+            await Post<MessageRequest, MessageResponse>("user/matches/" + userId, new MessageRequest { Message = message });
+        }
+
         public async Task Ping(Geolocation geolocation)
         {
             await Post<Geolocation, PingResponse>("user/ping", geolocation);
@@ -108,9 +113,14 @@ namespace Tinder
                 throw new TinderException(json);
             }
 
+            return Deserialize<TResponse>(json);
+        }
+
+        private T Deserialize<T>(string json)
+        {
             try
             {
-                return JsonSerializer.Deserialize<TResponse>(json);
+                return JsonSerializer.Deserialize<T>(json);
             }
             catch (Exception e)
             {
