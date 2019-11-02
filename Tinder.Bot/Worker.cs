@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
@@ -21,14 +22,14 @@ namespace Tinder.Bot
             _config = config;
         }
 
-        protected override async Task ExecuteAsync(CancellationToken _)
+        protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
             var authToken = _config.GetValue<string>("TinderClient:Token"); // X-Auth-Token
             var client = new TinderClient(authToken);
 
-            await foreach (var teasedRec in GetTeasedRecommendations(client))
+            await foreach (var teasedRec in GetTeasedRecommendations(client, cancellationToken: cancellationToken))
             {
-                var like = await client.Like(teasedRec.UserInfo.Id);
+                var like = await client.Like(teasedRec.UserInfo.Id, cancellationToken);
                 if (like.Match != null)
                     _logger.LogInformation("You matched " + teasedRec.UserInfo.Name);
                 else
@@ -36,14 +37,15 @@ namespace Tinder.Bot
             }
         }
 
-        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(TinderClient client, TimeSpan? throttling = null)
+        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(TinderClient client, TimeSpan? throttling = null,
+            [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             throttling ??= TimeSpan.FromMilliseconds(1000);
 
-            while (true)
+            while (!cancellationToken.IsCancellationRequested)
             {
-                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(client);
-                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(client, throttling.Value, teaserPhotoIds))
+                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(client, cancellationToken);
+                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(client, throttling.Value, teaserPhotoIds, cancellationToken))
                 {
                     yield return teasedRec;
                 }
@@ -53,12 +55,12 @@ namespace Tinder.Bot
         }
 
         private async IAsyncEnumerable<Recommendation> GetTeasedRecommendationsWhileOneAppears(TinderClient client, TimeSpan throttling,
-            ISet<string> teaserPhotoIds)
+            ISet<string> teaserPhotoIds, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             bool matchOccuredInSet = true;
             while (matchOccuredInSet)
             {
-                var recs = await GetRecommendations(client);
+                var recs = await GetRecommendations(client, cancellationToken);
 
                 foreach (var rec in recs)
                 {
@@ -70,15 +72,15 @@ namespace Tinder.Bot
                     else
                     {
                         _logger.LogDebug("Pass " + rec.UserInfo.Name);
-                        await client.Pass(rec.UserInfo.Id);
+                        await client.Pass(rec.UserInfo.Id, cancellationToken);
                     }
 
-                    await Task.Delay(throttling);
+                    await Task.Delay(throttling, cancellationToken);
                 }
             }
         }
 
-        private async Task<ISet<string>> GetTeaserPhotoIds(TinderClient client)
+        private async Task<ISet<string>> GetTeaserPhotoIds(TinderClient client, CancellationToken cancellationToken)
         {
             var teasers = await client.GetTeasers();
             return teasers
@@ -87,13 +89,13 @@ namespace Tinder.Bot
                 .ToHashSet();
         }
 
-        private async Task<IReadOnlyList<Recommendation>> GetRecommendations(TinderClient client)
+        private async Task<IReadOnlyList<Recommendation>> GetRecommendations(TinderClient client, CancellationToken cancellationToken)
         {
             IReadOnlyList<Recommendation> recs = null;
-            while ((recs = await client.GetRecommendations()) == null)
+            while ((recs = await client.GetRecommendations(cancellationToken)) == null)
             {
                 _logger.LogDebug("No more recommendations. Retrying in a minute");
-                await Task.Delay(TimeSpan.FromMinutes(1));
+                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
             }
 
             return recs;
