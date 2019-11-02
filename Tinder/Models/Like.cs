@@ -12,6 +12,6 @@ namespace Tinder.Models
         /// </summary>
         public Match Match { get; set; }
         [JsonPropertyName("likes_remaining")]
-        public bool LikesRemaining { get; set; }
+        public int LikesRemaining { get; set; }
     }
 }
