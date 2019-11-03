@@ -53,7 +53,14 @@ namespace Tinder
         Task<Like> Like(string userId, CancellationToken cancellationToken = default);
 
         /// <summary>
-        /// Disike an user (swipe left).
+        /// Superlike an user (swipe up).
+        /// </summary>
+        /// <param name="userId">Id of the target user.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        Task<Like> Superlike(string userId, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Dislike an user (swipe left).
         /// </summary>
         /// <param name="userId">Id of the target user.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>

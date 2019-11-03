@@ -70,6 +70,11 @@ namespace Tinder
             return Get<Like>("like/" + userId, cancellationToken);
         }
 
+        public Task<Like> Superlike(string userId, CancellationToken cancellationToken = default)
+        {
+            return Post<Like>($"like/{userId}/super", cancellationToken);
+        }
+
         public async Task Pass(string userId, CancellationToken cancellationToken = default)
         {
             await Get<Pass>("pass/" + userId, cancellationToken);
@@ -100,6 +105,11 @@ namespace Tinder
         private Task<TResponse> Get<TResponse>(string requestUri, CancellationToken cancellationToken)
         {
             return Send<TResponse>(new HttpRequestMessage(HttpMethod.Get, requestUri), cancellationToken);
+        }
+
+        private Task<TResponse> Post<TResponse>(string requestUri, CancellationToken cancellationToken)
+        {
+            return Send<TResponse>(new HttpRequestMessage(HttpMethod.Post, requestUri), cancellationToken);
         }
 
         private Task<TResponse> Post<TRequest, TResponse>(string requestUri, TRequest payload, CancellationToken cancellationToken)
