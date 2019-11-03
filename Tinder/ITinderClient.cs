@@ -12,9 +12,10 @@ namespace Tinder
         /// Get your matches.
         /// </summary>
         /// <param name="count">Max number of matches to return.</param>
-        /// <param name="isTinderU">???</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-        Task<IReadOnlyList<Match>> GetMatches(int count = 60, bool isTinderU = false, CancellationToken cancellationToken = default);
+        Task<IReadOnlyList<Match>> GetMatches(int count = 60, CancellationToken cancellationToken = default);
+
+        Task<Match> GetMatch(string matchId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Get your metadatas.

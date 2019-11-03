@@ -44,6 +44,12 @@ namespace Tinder
             return res.Data.Results;
         }
 
+        public async Task<Match> GetMatch(string matchId, CancellationToken cancellationToken = default)
+        {
+            var res = await Get<MatchResponse>($"matches/" + matchId, cancellationToken);
+            return res.Results;
+        }
+
         // TODO: add &message=1 to filter matches you messaged
         public async Task<IReadOnlyList<Match>> GetMatches(int count = 60, CancellationToken cancellationToken = default)
         {

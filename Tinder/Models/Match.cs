@@ -18,6 +18,12 @@ namespace Tinder.Models
         public IReadOnlyList<Match> Matches { get; set; }
     }
 
+    public class MatchResponse : ResponseMeta
+    {
+        [JsonPropertyName("results")]
+        public Match Results { get; set; }
+    }
+
     public class Match
     {
         [JsonPropertyName("_id")]
