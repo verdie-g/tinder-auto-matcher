@@ -44,9 +44,10 @@ namespace Tinder
             return res.Data.Results;
         }
 
-        public async Task<IReadOnlyList<Match>> GetMatches(int count = 60, bool isTinderU = false, CancellationToken cancellationToken = default)
+        // TODO: add &message=1 to filter matches you messaged
+        public async Task<IReadOnlyList<Match>> GetMatches(int count = 60, CancellationToken cancellationToken = default)
         {
-            var res = await Get<MatchesResponse>($"v2/matches?is_tinder_u={isTinderU}&message=1&count={count}", cancellationToken);
+            var res = await Get<MatchesResponse>($"v2/matches?is_tinder_u=false&count={count}", cancellationToken);
             return res.Data.Matches;
         }
 
@@ -55,9 +56,14 @@ namespace Tinder
             await Post<Geolocation, PingResponse>("user/ping", geolocation, cancellationToken);
         }
 
-        public async Task Message(string userId, string message, CancellationToken cancellationToken = default)
+        public async Task Message(string matchId, string message, CancellationToken cancellationToken = default)
         {
-            await Post<MessageRequest, MessageResponse>("user/matches/" + userId, new MessageRequest { Message = message }, cancellationToken);
+            await Post<MessageRequest, MessageResponse>("user/matches/" + matchId, new MessageRequest { Message = message }, cancellationToken);
+        }
+
+        public async Task LikeMessage(string messageId, CancellationToken cancellationToken = default)
+        {
+            await Post<LikeMessageResponse>($"message/{messageId}/like", cancellationToken);
         }
 
         public async Task Travel(Geolocation geolocation, CancellationToken cancellationToken = default)

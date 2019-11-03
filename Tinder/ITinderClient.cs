@@ -69,10 +69,17 @@ namespace Tinder
         /// <summary>
         /// Message an user. 
         /// </summary>
-        /// <param name="userId">Id of the target user.</param>
+        /// <param name="match">Id of the target match.</param>
         /// <param name="message">Message content.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
-        Task Message(string userId, string message, CancellationToken cancellationToken = default);
+        Task Message(string matchId, string message, CancellationToken cancellationToken = default);
+
+        /// <summary>
+        /// Like a message.
+        /// </summary>
+        /// <param name="messageId">Id of the target message.</param>
+        /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
+        Task LikeMessage(string messageId, CancellationToken cancellationToken = default);
 
         /// <summary>
         /// Update your location.
@@ -91,9 +98,8 @@ namespace Tinder
         /// <summary>
         /// Unmatch an user.
         /// </summary>
-        /// <param name="match">Id of the target user.</param>
+        /// <param name="match">Id of the target match.</param>
         /// <param name="cancellationToken">The cancellation token to cancel operation.</param>
         Task Unmatch(string matchId, CancellationToken cancellationToken = default);
     }
-
 }

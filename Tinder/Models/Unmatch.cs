@@ -1,6 +1,6 @@
 namespace Tinder.Models
 {
-    public class UnmatchResponse
+    public class UnmatchResponse : ResponseMeta
     {
 
     }
