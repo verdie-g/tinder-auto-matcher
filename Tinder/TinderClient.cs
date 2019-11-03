@@ -92,6 +92,11 @@ namespace Tinder
             return res;
         }
 
+        public void Dispose()
+        {
+            _httpClient.Dispose();
+        }
+
         private Task<TResponse> Get<TResponse>(string requestUri, CancellationToken cancellationToken)
         {
             return Send<TResponse>(new HttpRequestMessage(HttpMethod.Get, requestUri), cancellationToken);

@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
@@ -5,7 +6,7 @@ using Tinder.Models;
 
 namespace Tinder
 {
-    public interface ITinderClient
+    public interface ITinderClient : IDisposable
     {
         /// <summary>
         /// Get your matches.
