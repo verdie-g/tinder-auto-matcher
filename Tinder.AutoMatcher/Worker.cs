@@ -4,7 +4,6 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Tinder.Models;
@@ -13,23 +12,20 @@ namespace Tinder.AutoMatcher
 {
     public class Worker : BackgroundService
     {
+        private readonly ITinderClient _client;
         private readonly ILogger<Worker> _logger;
-        private readonly IConfiguration _config;
 
-        public Worker(ILogger<Worker> logger, IConfiguration config)
+        public Worker(ITinderClient tinderClient, ILogger<Worker> logger)
         {
+            _client = tinderClient;
             _logger = logger;
-            _config = config;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            var authToken = _config.GetValue<string>("TinderClient:Token"); // X-Auth-Token
-            var client = new TinderClient(authToken);
-
-            await foreach (var teasedRec in GetTeasedRecommendations(client, cancellationToken: cancellationToken))
+            await foreach (var teasedRec in GetTeasedRecommendations(cancellationToken: cancellationToken))
             {
-                var like = await client.Like(teasedRec.UserInfo.Id, cancellationToken);
+                var like = await _client.Like(teasedRec.UserInfo.Id, cancellationToken);
                 if (like.Match != null)
                     _logger.LogInformation("You matched " + teasedRec.UserInfo.Name);
                 else
@@ -37,15 +33,15 @@ namespace Tinder.AutoMatcher
             }
         }
 
-        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(TinderClient client, TimeSpan? throttling = null,
+        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(TimeSpan? throttling = null,
             [EnumeratorCancellation] CancellationToken cancellationToken = default)
         {
             throttling ??= TimeSpan.FromMilliseconds(1000);
 
             while (!cancellationToken.IsCancellationRequested)
             {
-                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(client, cancellationToken);
-                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(client, throttling.Value, teaserPhotoIds, cancellationToken))
+                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(cancellationToken);
+                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(throttling.Value, teaserPhotoIds, cancellationToken))
                 {
                     yield return teasedRec;
                 }
@@ -54,13 +50,13 @@ namespace Tinder.AutoMatcher
             }
         }
 
-        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendationsWhileOneAppears(TinderClient client, TimeSpan throttling,
-            ISet<string> teaserPhotoIds, [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendationsWhileOneAppears(TimeSpan throttling, ISet<string> teaserPhotoIds,
+            [EnumeratorCancellation] CancellationToken cancellationToken)
         {
             bool matchOccuredInSet = true;
             while (matchOccuredInSet)
             {
-                var recs = await GetRecommendations(client, cancellationToken);
+                var recs = await GetRecommendations(cancellationToken);
 
                 foreach (var rec in recs)
                 {
@@ -72,7 +68,7 @@ namespace Tinder.AutoMatcher
                     else
                     {
                         _logger.LogDebug("Pass " + rec.UserInfo.Name);
-                        await client.Pass(rec.UserInfo.Id, cancellationToken);
+                        await _client.Pass(rec.UserInfo.Id, cancellationToken);
                     }
 
                     await Task.Delay(throttling, cancellationToken);
@@ -80,19 +76,19 @@ namespace Tinder.AutoMatcher
             }
         }
 
-        private async Task<ISet<string>> GetTeaserPhotoIds(TinderClient client, CancellationToken cancellationToken)
+        private async Task<ISet<string>> GetTeaserPhotoIds(CancellationToken cancellationToken)
         {
-            var teasers = await client.GetTeasers();
+            var teasers = await _client.GetTeasers();
             return teasers
                 .SelectMany(t => t.User.Photos)
                 .Select(photo => photo.Id)
                 .ToHashSet();
         }
 
-        private async Task<IReadOnlyList<Recommendation>> GetRecommendations(TinderClient client, CancellationToken cancellationToken)
+        private async Task<IReadOnlyList<Recommendation>> GetRecommendations(CancellationToken cancellationToken)
         {
             IReadOnlyList<Recommendation> recs = null;
-            while ((recs = await client.GetRecommendations(cancellationToken)) == null)
+            while ((recs = await _client.GetRecommendations(cancellationToken)) == null)
             {
                 _logger.LogDebug("No more recommendations. Retrying in a minute");
                 await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
