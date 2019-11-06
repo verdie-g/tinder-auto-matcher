@@ -14,7 +14,7 @@ namespace Tinder
     {
         private readonly HttpClient _httpClient;
 
-        public TinderClient(string authToken)
+        public TinderClient(Guid authToken)
         {
             _httpClient = new HttpClient
             {
@@ -23,7 +23,7 @@ namespace Tinder
 
             _httpClient.DefaultRequestHeaders.Add("User-Agent", "Tinder/7.5.3 (iPhone; iOS 10.3.2; Scale/2.00)");
             _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-            _httpClient.DefaultRequestHeaders.Add("X-Auth-Token", authToken);
+            _httpClient.DefaultRequestHeaders.Add("X-Auth-Token", authToken.ToString());
         }
 
         public async Task<IReadOnlyList<Recommendation>> GetRecommendations(CancellationToken cancellationToken = default)

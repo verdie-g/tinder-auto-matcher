@@ -1,3 +1,4 @@
+using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -17,7 +18,12 @@ namespace Tinder.AutoMatcher
         private static void ConfigureServices(HostBuilderContext hostContext, IServiceCollection services)
         {
             var tinderAuthToken = hostContext.Configuration.GetValue<string>("TinderClient:Token"); // X-Auth-Token
-            var tinderClient = new TinderClient(tinderAuthToken);
+            if (string.IsNullOrEmpty(tinderAuthToken) || !Guid.TryParse(tinderAuthToken, out Guid tinderAuthTokenGuid))
+            {
+                throw new Exception("TinderClient:Token is missing in appsettings.json or the token is malformed");
+            }
+
+            var tinderClient = new TinderClient(tinderAuthTokenGuid);
 
             services.AddSingleton<ITinderClient>(tinderClient);
             services.AddHostedService<Worker>();
