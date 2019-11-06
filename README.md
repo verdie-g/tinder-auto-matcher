@@ -4,7 +4,8 @@
 
 ## Overview
 The goal of Tinder Auto-Matcher is to dehumanize as much as it can social interactions. This is achieved by automatically
-liking back people who liked you Tinder to create a match without having to swipe one second.
+liking back people who liked you Tinder to create a match without having to swipe one second. The next step would be to
+send you an email everyday with recapitulation of today's matches.
 
 ## Usage
 - First you need your Tinder's authentication token. Go to [tinder.com](https://tinder.com), open the developer console, filter by XHR
