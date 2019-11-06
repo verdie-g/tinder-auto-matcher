@@ -23,41 +23,29 @@ namespace Tinder.AutoMatcher
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
         {
-            await foreach (var teasedRec in GetTeasedRecommendations(cancellationToken: cancellationToken))
-            {
-                var like = await _client.Like(teasedRec.UserInfo.Id, cancellationToken);
-                if (like.Match != null)
-                    _logger.LogInformation("You matched " + teasedRec.UserInfo.Name);
-                else
-                    _logger.LogError($"{teasedRec.UserInfo.Name} ({teasedRec.UserInfo.Id}) was not a match");
-            }
-        }
-
-        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(TimeSpan? throttling = null,
-            [EnumeratorCancellation] CancellationToken cancellationToken = default)
-        {
-            throttling ??= TimeSpan.FromMilliseconds(1000);
-
             while (!cancellationToken.IsCancellationRequested)
             {
                 ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(cancellationToken);
-                await foreach (var teasedRec in GetTeasedRecommendationsWhileOneAppears(throttling.Value, teaserPhotoIds, cancellationToken))
+                await foreach (var teasedRec in GetTeasedRecommendations(teaserPhotoIds, cancellationToken))
                 {
-                    yield return teasedRec;
+                    var like = await _client.Like(teasedRec.UserInfo.Id, cancellationToken);
+                    if (like.Match != null)
+                        _logger.LogInformation("You matched " + teasedRec.UserInfo.Name);
+                    else
+                        _logger.LogError($"{teasedRec.UserInfo.Name} ({teasedRec.UserInfo.Id}) was not a match");
                 }
 
-                _logger.LogDebug("No teased recommendations were found in the last recommendations set. Refreshing teaser list");
+                _logger.LogInformation("No more teased recommendations found. Pausing for 15 minutes");
+                await Task.Delay(TimeSpan.FromMinutes(15));
             }
         }
 
-        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendationsWhileOneAppears(TimeSpan throttling, ISet<string> teaserPhotoIds,
-            [EnumeratorCancellation] CancellationToken cancellationToken)
+        private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(ISet<string> teaserPhotoIds, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            bool matchOccuredInSet = true;
-            while (matchOccuredInSet)
+            bool matchOccuredInSet = false;
+            do
             {
                 var recs = await GetRecommendations(cancellationToken);
-
                 foreach (var rec in recs)
                 {
                     if (rec.UserInfo.Photos.Any(photo => teaserPhotoIds.Contains(photo.Id)))
@@ -65,15 +53,8 @@ namespace Tinder.AutoMatcher
                         matchOccuredInSet = true;
                         yield return rec;
                     }
-                    else
-                    {
-                        _logger.LogDebug("Pass " + rec.UserInfo.Name);
-                        await _client.Pass(rec.UserInfo.Id, cancellationToken);
-                    }
-
-                    await Task.Delay(throttling, cancellationToken);
                 }
-            }
+            } while (matchOccuredInSet);
         }
 
         private async Task<ISet<string>> GetTeaserPhotoIds(CancellationToken cancellationToken)
@@ -90,8 +71,8 @@ namespace Tinder.AutoMatcher
             IReadOnlyList<Recommendation> recs = null;
             while ((recs = await _client.GetRecommendations(cancellationToken)) == null)
             {
-                _logger.LogDebug("No more recommendations. Retrying in a minute");
-                await Task.Delay(TimeSpan.FromMinutes(1), cancellationToken);
+                _logger.LogDebug("No more recommendations. Retrying in 5 minutes");
+                await Task.Delay(TimeSpan.FromMinutes(5), cancellationToken);
             }
 
             return recs;
