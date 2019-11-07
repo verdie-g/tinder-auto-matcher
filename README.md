@@ -8,7 +8,7 @@ liking back people who liked you Tinder to create a match without having to swip
 send you an email everyday with recapitulation of today's matches.
 
 ## Usage
-- First you need your Tinder's authentication token. Go to [tinder.com](https://tinder.com), open the developer console, filter by XHR
+- First you need your Tinder's authentication token. Log in to [tinder.com](https://tinder.com), open the developer console, filter by XHR
   and find a request with an _X-Auth-Token_ header in the request headers. Save its value.
 - Write the _X-Auth-Token_ value in the token key in Tinder.AutoMatcher/appsettings.json.
 - Install [.NET Core 3.X](https://dotnet.microsoft.com/download).
@@ -25,4 +25,12 @@ Thereby, you can see the real pictures just by disable some CSS rules. These pic
 This project works by saving the ids of the "blurred" images and then finds them in your recommendations feed.
 
 ## F.A.Q
-**Q:** How did you meet your girlfriend, son?
+**Q:** I didn't get any match even tough Tinder tells me that I got X+ likes!?
+
+**A:** Several reasons could explain that:
+- These users are now out of range
+- They are not in your elo anymore
+- You swipe them left when you were swiping like a muggle
+
+
+**Q:** Son, how did you meet your girlfriend?
