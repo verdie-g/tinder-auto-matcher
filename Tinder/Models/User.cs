@@ -7,27 +7,27 @@ namespace Tinder.Models
     public class UserBase
     {
         [JsonPropertyName("_id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = default!;
         [JsonPropertyName("photos")]
-        public IReadOnlyList<Photo> Photos { get; set; }
+        public IReadOnlyList<Photo> Photos { get; set; } = default!;
     }
 
     public class UserProfile : UserBase
     {
         [JsonPropertyName("bio")]
-        public string Bio { get; set; }
+        public string Bio { get; set; } = default!;
         [JsonPropertyName("birth_date")]
         public DateTime BirthDate { get; set; }
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
         [JsonPropertyName("gender")]
-        public Gender GenderInfo { get; set; }
+        public Gender GenderInfo { get; set; } = default!;
         [JsonPropertyName("schools")]
-        public IReadOnlyList<School> Schools { get; set; }
+        public IReadOnlyList<School> Schools { get; set; } = default!;
         [JsonPropertyName("companies")]
-        public IReadOnlyList<Company> Companies { get; set; }
+        public IReadOnlyList<Company> Companies { get; set; } = default!;
         [JsonPropertyName("jobs")]
-        public IReadOnlyList<Job> Jobs { get; set; }
+        public IReadOnlyList<Job> Jobs { get; set; } = default!;
 
         public enum Gender
         {
@@ -38,19 +38,19 @@ namespace Tinder.Models
         public class School
         {
             [JsonPropertyName("name")]
-            public string Name { get; set; }
+            public string Name { get; set; } = default!;
         }
 
         public class Company
         {
             [JsonPropertyName("name")]
-            public string Name { get; set; }
+            public string Name { get; set; } = default!;
         }
 
         public class Job
         {
             [JsonPropertyName("company")]
-            public Company Company { get; set; }
+            public Company Company { get; set; } = default!;
         }
     }
 
@@ -71,15 +71,15 @@ namespace Tinder.Models
         [JsonPropertyName("create_date")]
         public DateTime CreateDate { get; set; }
         [JsonPropertyName("crm_id")]
-        public string CrmId { get; set; }
+        public string CrmId { get; set; } = default!;
         [JsonPropertyName("discoverable")]
         public bool Discoverable { get; set; }
         [JsonPropertyName("interests")]
-        public IReadOnlyList<Facebook.Interest> Interests { get; set; }
+        public IReadOnlyList<Facebook.Interest> Interests { get; set; } = default!;
         [JsonPropertyName("distance_filter")]
         public int DistanceFilter { get; set; }
         [JsonPropertyName("gender_filter")]
-        public Gender GenderFilter { get; set; }
+        public Gender GenderFilter { get; set; } = default!;
         [JsonPropertyName("photos_processing")]
         public bool PhotosProcessing { get; set; }
         [JsonPropertyName("photo_optimizer_enabled")]
@@ -88,12 +88,12 @@ namespace Tinder.Models
         public DateTime PingTime { get; set; }
         // public IReadOnlyList<> Badges { get; set; }
         [JsonPropertyName("phone_id")]
-        public string PhoneId { get; set; }
+        public string PhoneId { get; set; } = default!;
         [JsonPropertyName("interested_in")]
-        public IReadOnlyList<Gender> InterestedIn { get; set; }
-        // public Geolocation pos { get; set; }
+        public IReadOnlyList<Gender> InterestedIn { get; set; } = default!;
+        // public Geolocation pos { get; set; } = default!;
         [JsonPropertyName("auto_play_video")]
-        public string AutoPlayVideo { get; set; }
+        public string AutoPlayVideo { get; set; } = default!;
         [JsonPropertyName("top_picks_discoverable")]
         public bool TopPicksDiscoverable { get; set; }
         [JsonPropertyName("photo_tagging_enabled")]

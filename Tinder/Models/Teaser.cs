@@ -7,29 +7,29 @@ namespace Tinder.Models
     public class TeasersResponse
     {
         [JsonPropertyName("meta")]
-        public ResponseMeta Meta { get; set; }
+        public ResponseMeta Meta { get; set; } = default!;
         [JsonPropertyName("data")]
-        public TeasersResponseData Data { get; set; }
+        public TeasersResponseData Data { get; set; } = default!;
     }
 
     public class TeasersResponseData
     {
         [JsonPropertyName("results")]
-        public IReadOnlyList<Teaser> Results { get; set; }
+        public IReadOnlyList<Teaser> Results { get; set; } = default!;
     }
 
     public class Teaser
     {
         [JsonPropertyName("user")]
-        public UserBase User { get; set; }
+        public UserBase User { get; set; } = default!;
     }
 
     public class TeaserResponse
     {
         [JsonPropertyName("meta")]
-        public ResponseMeta Meta { get; set; }
+        public ResponseMeta Meta { get; set; } = default!;
         [JsonPropertyName("data")]
-        public TeaserData Data { get; set; }
+        public TeaserData Data { get; set; } = default!;
     }
 
     public class TeaserData
@@ -39,6 +39,6 @@ namespace Tinder.Models
         [JsonPropertyName("count")]
         public int Count { get; set; }
         [JsonPropertyName("teaser_url")]
-        public Uri TeaserUrl { get; set; }
+        public Uri TeaserUrl { get; set; } = default!;
     }
 }

@@ -7,9 +7,9 @@ namespace Tinder.Models.Converters
     /// <summary>
     /// Convert a json value to null if false or to T if the value is an object.
     /// </summary>
-    class JsonFalseOrObjectConverter<T> : JsonConverter<T> where T : class
+    class JsonFalseOrObjectConverter<T> : JsonConverter<T?> where T : class
     {
-        public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+        public override T? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
         {
             if (reader.TokenType == JsonTokenType.False)
             {
@@ -21,7 +21,7 @@ namespace Tinder.Models.Converters
             }
         }
 
-        public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
+        public override void Write(Utf8JsonWriter writer, T? value, JsonSerializerOptions options)
         {
             if (value == null)
             {

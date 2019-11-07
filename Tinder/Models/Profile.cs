@@ -7,31 +7,31 @@ namespace Tinder.Models
     {
 
         [JsonPropertyName("meta")]
-        public ResponseMeta Meta { get; set; }
+        public ResponseMeta Meta { get; set; } = default!;
         [JsonPropertyName("data")]
-        public Profile Profile { get; set; }
+        public Profile Profile { get; set; } = default!;
     }
 
     public class Profile
     {
         [JsonPropertyName("likes")]
-        public Likes LikesInfo { get; set; }
+        public Likes LikesInfo { get; set; } = default!;
         [JsonPropertyName("account")]
-        public Account AccountInfo { get; set; }
+        public Account AccountInfo { get; set; } = default!;
         [JsonPropertyName("email")]
-        public Email EmailInfo { get; set; }
+        public Email EmailInfo { get; set; } = default!;
         [JsonPropertyName("boost")]
-        public Boost BoostInfo { get; set; }
+        public Boost BoostInfo { get; set; } = default!;
         [JsonPropertyName("plus_control")]
-        public PlusControl PlusControlInfo { get; set; }
+        public PlusControl PlusControlInfo { get; set; } = default!;
         [JsonPropertyName("products")]
-        public Product ProductsInfo { get; set; }
+        public Product ProductsInfo { get; set; } = default!;
         [JsonPropertyName("user")]
-        public UserSelf User { get; set; }
+        public UserSelf User { get; set; } = default!;
         [JsonPropertyName("instagram")]
-        public Instagram InstagramInfo { get; set; }
+        public Instagram InstagramInfo { get; set; } = default!;
         [JsonPropertyName("contact_cards")]
-        public ContactCards ContactCardsInfo { get; set; }
+        public ContactCards ContactCardsInfo { get; set; } = default!;
 
         public class Likes
         {
@@ -42,7 +42,7 @@ namespace Tinder.Models
         public class Account
         {
             [JsonPropertyName("account_phone_number")]
-            public string AccountPhoneNumber { get; set; }
+            public string AccountPhoneNumber { get; set; } = default!;
             [JsonPropertyName("is_email_verified")]
             public bool IsEmailVerified { get; set; }
             [JsonPropertyName("account_email")]
@@ -52,7 +52,7 @@ namespace Tinder.Models
         public class Email
         {
             [JsonPropertyName("email")]
-            public string EmailAddress { get; set; }
+            public string EmailAddress { get; set; } = default!;
 
             public class Settings
             {
@@ -68,16 +68,16 @@ namespace Tinder.Models
         public class ContactCards
         {
             [JsonPropertyName("populated_cards")]
-            public IReadOnlyList<PopulatedCard> PopulatedCards { get; set; }
+            public IReadOnlyList<PopulatedCard> PopulatedCards { get; set; } = default!;
             [JsonPropertyName("available_cards")]
-            public IReadOnlyList<string> AvailableCards { get; set; }
+            public IReadOnlyList<string> AvailableCards { get; set; } = default!;
 
             public class PopulatedCard
             {
                 [JsonPropertyName("contact_id")]
-                public string ContactId { get; set; }
+                public string ContactId { get; set; } = default!;
                 [JsonPropertyName("contact_type")]
-                public string ContactType { get; set; }
+                public string ContactType { get; set; } = default!;
                 [JsonPropertyName("default")]
                 public bool Default { get; set; }
             }
@@ -108,9 +108,9 @@ namespace Tinder.Models
             [JsonPropertyName("boost_refresh_interval")]
             public int BoostRefreshInterval { get; set; }
             [JsonPropertyName("boost_refresh_interval_unit")]
-            public string BoostRefreshIntervalUnit { get; set; }
+            public string BoostRefreshIntervalUnit { get; set; } = default!;
             // [JsonPropertyName("purchases")]
-            // public IReadOnlyList<> BoostRefreshIntervalUnit { get; set; }
+            // public IReadOnlyList<> BoostRefreshIntervalUnit { get; set; } = default!;
         }
 
         public class PlusControl

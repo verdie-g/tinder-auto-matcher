@@ -7,28 +7,28 @@ namespace Tinder.Models
     public class Photo
     {
         [JsonPropertyName("id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = default!;
         [JsonPropertyName("url")]
-        public Uri Url { get; set; }
+        public Uri Url { get; set; } = default!;
         [JsonPropertyName("crop_info")]
-        public Crop CropInfo { get; set; }
+        public Crop CropInfo { get; set; } = default!;
         [JsonPropertyName("processedFiles")]
-        public IReadOnlyList<Processed> ProcessedFiles { get; set; }
+        public IReadOnlyList<Processed> ProcessedFiles { get; set; } = default!;
         [JsonPropertyName("last_update_time")]
         public DateTime LastUpdateTime { get; set; }
         [JsonPropertyName("file_name")]
-        public string FileName { get; set; }
+        public string FileName { get; set; } = default!;
         [JsonPropertyName("extension")]
-        public string Extension { get; set; }
+        public string Extension { get; set; } = default!;
         [JsonPropertyName("webp_qf")]
-        public IReadOnlyList<int> WebpQf { get; set; }
+        public IReadOnlyList<int> WebpQf { get; set; } = default!;
 
         public class Crop
         {
             [JsonPropertyName("user")]
-            public Content User { get; set; }
+            public Content User { get; set; } = default!;
             [JsonPropertyName("algo")]
-            public Content Algo { get; set; }
+            public Content Algo { get; set; } = default!;
             [JsonPropertyName("processed_by_bullseye")]
             public bool ProcessedByBullseye { get; set; }
             [JsonPropertyName("user_customized")]
@@ -50,7 +50,7 @@ namespace Tinder.Models
         public class Processed
         {
             [JsonPropertyName("url")]
-            public Uri Url { get; set; }
+            public Uri Url { get; set; } = default!;
             [JsonPropertyName("height")]
             public int Height { get; set; }
             [JsonPropertyName("width")]

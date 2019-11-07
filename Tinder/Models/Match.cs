@@ -7,29 +7,29 @@ namespace Tinder.Models
     public class MatchesResponse
     {
         [JsonPropertyName("meta")]
-        public ResponseMeta Meta { get; set; }
+        public ResponseMeta Meta { get; set; } = default!;
         [JsonPropertyName("data")]
-        public MatchesResponseData Data { get; set; }
+        public MatchesResponseData Data { get; set; } = default!;
     }
 
     public class MatchesResponseData
     {
         [JsonPropertyName("matches")]
-        public IReadOnlyList<Match> Matches { get; set; }
+        public IReadOnlyList<Match> Matches { get; set; } = default!;
     }
 
     public class MatchResponse : ResponseMeta
     {
         [JsonPropertyName("results")]
-        public Match Results { get; set; }
+        public Match Results { get; set; } = default!;
     }
 
     public class Match
     {
         [JsonPropertyName("_id")]
-        public string Id { get; set; }
+        public string Id { get; set; } = default!;
         [JsonPropertyName("seen")]
-        public Seen SeenInfo { get; set; }
+        public Seen SeenInfo { get; set; } = default!;
         [JsonPropertyName("closed")]
         public bool Closed { get; set; }
         [JsonPropertyName("common_friend_count")]
@@ -45,11 +45,11 @@ namespace Tinder.Models
         [JsonPropertyName("message_count")]
         public int MessageCount { get; set; }
         [JsonPropertyName("messages")]
-        public IReadOnlyList<Message> Messages { get; set; }
+        public IReadOnlyList<Message> Messages { get; set; } = default!;
         [JsonPropertyName("muted")]
         public bool Muted { get; set; }
         [JsonPropertyName("participants")]
-        public IReadOnlyList<string> Particpants { get; set; }
+        public IReadOnlyList<string> Particpants { get; set; } = default!;
         [JsonPropertyName("pending")]
         public bool Pending { get; set; }
         [JsonPropertyName("is_super_like")]
@@ -67,32 +67,32 @@ namespace Tinder.Models
         [JsonPropertyName("following_moments")]
         public bool FollowingMoments { get; set; }
         [JsonPropertyName("read_receipt")]
-        public ReadReceipt ReadReceiptInfo { get; set; }
+        public ReadReceipt ReadReceiptInfo { get; set; } = default!;
         [JsonPropertyName("person")]
-        public UserProfile Person { get; set; }
+        public UserProfile Person { get; set; } = default!;
 
         public class Seen
         {
             [JsonPropertyName("match_seen")]
             public bool MatchSeen { get; set; }
             [JsonPropertyName("last_seen_msg_id")]
-            public string LastSeenMsgId { get; set; }
+            public string LastSeenMsgId { get; set; } = default!;
         }
 
         public class Message
         {
             [JsonPropertyName("_id")]
-            public string Id { get; set; }
+            public string Id { get; set; } = default!;
             [JsonPropertyName("match_id")]
-            public string MatchId { get; set; }
+            public string MatchId { get; set; } = default!;
             [JsonPropertyName("sent_date")]
-            public string SentDate { get; set; }
+            public string SentDate { get; set; } = default!;
             [JsonPropertyName("message")]
-            public string Content { get; set; }
+            public string Content { get; set; } = default!;
             [JsonPropertyName("to")]
-            public string To { get; set; }
+            public string To { get; set; } = default!;
             [JsonPropertyName("from")]
-            public string From { get; set; }
+            public string From { get; set; } = default!;
             [JsonPropertyName("timestamp")]
             public int Timestamp { get; set; }
         }

@@ -10,7 +10,7 @@ namespace Tinder.Models
         /// <summary>
         /// Null if there was not match.
         /// </summary>
-        public Match Match { get; set; }
+        public Match Match { get; set; } = default!;
         [JsonPropertyName("likes_remaining")]
         public int LikesRemaining { get; set; }
     }
