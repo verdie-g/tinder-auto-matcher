@@ -29,6 +29,10 @@ namespace Tinder.AutoMatcher
             {
                 await MatchTeasedRecommendations(cancellationToken);
             }
+            catch (TaskCanceledException) when (cancellationToken.IsCancellationRequested)
+            {
+                throw;
+            }
             catch (Exception e)
             {
                 _logger.LogError(e.Message);
