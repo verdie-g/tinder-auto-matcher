@@ -51,7 +51,7 @@ namespace Tinder.AutoMatcher
                 }
 
                 _logger.LogInformation("No more teased recommendations found. Pausing for 15 minutes");
-                await Task.Delay(TimeSpan.FromMinutes(15));
+                await Task.Delay(TimeSpan.FromMinutes(15), cancellationToken);
             }
         }
 
