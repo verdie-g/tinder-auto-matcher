@@ -68,7 +68,7 @@ namespace Tinder.AutoMatcher
 
         private async Task<IReadOnlyList<Recommendation>> GetRecommendations(CancellationToken cancellationToken)
         {
-            IReadOnlyList<Recommendation>? recs = null;
+            IReadOnlyList<Recommendation>? recs;
             while ((recs = await _client.GetRecommendations(cancellationToken)) == null)
             {
                 _logger.LogDebug("No more recommendations. Retrying in 5 minutes");

@@ -18,7 +18,7 @@ namespace Tinder.Models
         /// <summary>
         /// Can be null if there is no more recommendations.
         /// </summary>
-        public IReadOnlyList<Recommendation> Results { get; set; } = default!;
+        public IReadOnlyList<Recommendation>? Results { get; set; }
     }
 
     public class Recommendation

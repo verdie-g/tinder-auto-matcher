@@ -26,7 +26,7 @@ namespace Tinder
             _httpClient.DefaultRequestHeaders.Add("X-Auth-Token", authToken.ToString());
         }
 
-        public async Task<IReadOnlyList<Recommendation>> GetRecommendations(CancellationToken cancellationToken = default)
+        public async Task<IReadOnlyList<Recommendation>?> GetRecommendations(CancellationToken cancellationToken = default)
         {
             var res = await Get<RecommendationResponse>("v2/recs/core", cancellationToken);
             return res.Data.Results;
