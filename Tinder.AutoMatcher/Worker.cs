@@ -57,9 +57,10 @@ namespace Tinder.AutoMatcher
 
         private async IAsyncEnumerable<Recommendation> GetTeasedRecommendations(ISet<string> teaserPhotoIds, [EnumeratorCancellation] CancellationToken cancellationToken)
         {
-            bool matchOccuredInSet = false;
+            bool matchOccuredInSet;
             do
             {
+                matchOccuredInSet = false;
                 var recs = await GetRecommendations(cancellationToken);
                 foreach (var rec in recs)
                 {
