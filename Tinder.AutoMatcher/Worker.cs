@@ -25,7 +25,7 @@ namespace Tinder.AutoMatcher
         {
             while (!cancellationToken.IsCancellationRequested)
             {
-                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(cancellationToken);
+                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds();
                 await foreach (var teasedRec in GetTeasedRecommendations(teaserPhotoIds, cancellationToken))
                 {
                     var like = await _client.Like(teasedRec.UserInfo.Id, cancellationToken);
@@ -57,7 +57,7 @@ namespace Tinder.AutoMatcher
             } while (matchOccuredInSet);
         }
 
-        private async Task<ISet<string>> GetTeaserPhotoIds(CancellationToken cancellationToken)
+        private async Task<ISet<string>> GetTeaserPhotoIds()
         {
             var teasers = await _client.GetTeasers();
             return teasers
