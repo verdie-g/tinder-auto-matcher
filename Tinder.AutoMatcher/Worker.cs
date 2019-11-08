@@ -13,15 +13,30 @@ namespace Tinder.AutoMatcher
     public class Worker : BackgroundService
     {
         private readonly ITinderClient _client;
+        private readonly IHostApplicationLifetime _appLifetime;
         private readonly ILogger<Worker> _logger;
 
-        public Worker(ITinderClient tinderClient, ILogger<Worker> logger)
+        public Worker(ITinderClient tinderClient, IHostApplicationLifetime appLiftetime, ILogger<Worker> logger)
         {
             _client = tinderClient;
+            _appLifetime = appLiftetime;
             _logger = logger;
         }
 
         protected override async Task ExecuteAsync(CancellationToken cancellationToken)
+        {
+            try
+            {
+                await MatchTeasedRecommendations(cancellationToken);
+            }
+            catch (Exception e)
+            {
+                _logger.LogError(e.Message);
+                _appLifetime.StopApplication();
+            }
+        }
+
+        private async Task MatchTeasedRecommendations(CancellationToken cancellationToken)
         {
             while (!cancellationToken.IsCancellationRequested)
             {
