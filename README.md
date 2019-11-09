@@ -16,10 +16,11 @@ send you an email everyday with recapitulation of today's matches.
 
 ## How does it work?
 Tinder has a section where one can see the blurred pictures of the people who liked you.
+To see the real profiles, you have to get Tinder Gold.
 <p align="center"><img src="https://user-images.githubusercontent.com/9092290/68415518-d6463600-0192-11ea-8c1e-be4a3e32d021.jpg"></p>
 
 However the Tinder API send unblurred pictures and the blurring is computed on the client side.
-Thereby, you can see the real pictures just by disable some CSS rules. These pictures are in very low definition though.
+Thereby, you can see the real pictures just by disabling some CSS rules. These pictures are in very low definition though.
 <p align="center"><img src="https://user-images.githubusercontent.com/9092290/68415517-d6463600-0192-11ea-8606-0e61ac9a6320.jpg"></p>
 
 This project works by saving the ids of the "blurred" images and then finds them in your recommendations feed.
