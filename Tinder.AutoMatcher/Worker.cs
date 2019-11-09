@@ -54,8 +54,8 @@ namespace Tinder.AutoMatcher
                         _logger.LogError($"{teasedRec.UserInfo.Name} ({teasedRec.UserInfo.Id}) was not a match");
                 }
 
-                _logger.LogInformation("No more teased recommendations found. Pausing for 15 minutes");
-                await Task.Delay(TimeSpan.FromMinutes(15), cancellationToken);
+                _logger.LogInformation("No more teased recommendations found. Pausing for 2 hours");
+                await Task.Delay(TimeSpan.FromHours(2), cancellationToken);
             }
         }
 
@@ -91,8 +91,8 @@ namespace Tinder.AutoMatcher
             IReadOnlyList<Recommendation>? recs;
             while ((recs = await _client.GetRecommendations(cancellationToken)) == null)
             {
-                _logger.LogDebug("No more recommendations. Retrying in 5 minutes");
-                await Task.Delay(TimeSpan.FromMinutes(5), cancellationToken);
+                _logger.LogDebug("No more recommendations. Retrying in 1 hour");
+                await Task.Delay(TimeSpan.FromHours(1), cancellationToken);
             }
 
             return recs;
