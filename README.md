@@ -32,6 +32,6 @@ This project works by saving the ids of the "blurred" images and then finds them
 - These users are now out of range
 - They are not in your elo anymore
 - You swiped them left when you were swiping like a muggle
-
+- Recommendations are sometimes really random so the program works better in the long run. Don't except to match everyone on the first try
 
 **Q:** Son, how did you meet your girlfriend?
