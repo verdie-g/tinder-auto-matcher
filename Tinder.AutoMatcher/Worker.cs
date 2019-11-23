@@ -47,7 +47,7 @@ namespace Tinder.AutoMatcher
                 int likesNb = await GetLikesNumber(cancellationToken);
                 _logger.LogInformation($"{likesNb} people liked you");
 
-                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds();
+                ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(cancellationToken);
                 await foreach (var teasedRec in GetTeasedRecommendations(teaserPhotoIds, cancellationToken))
                 {
                     var like = await _client.Like(teasedRec.UserInfo.Id, cancellationToken);
@@ -80,9 +80,9 @@ namespace Tinder.AutoMatcher
             } while (matchOccuredInSet);
         }
 
-        private async Task<ISet<string>> GetTeaserPhotoIds()
+        private async Task<ISet<string>> GetTeaserPhotoIds(CancellationToken cancellationToken)
         {
-            var teasers = await _client.GetTeasers();
+            var teasers = await _client.GetTeasers(cancellationToken);
             return teasers
                 .SelectMany(t => t.User.Photos)
                 .Select(photo => photo.Id)
