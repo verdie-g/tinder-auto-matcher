@@ -45,7 +45,7 @@ namespace Tinder.AutoMatcher
             while (!cancellationToken.IsCancellationRequested)
             {
                 int likesNb = await GetLikesNumber(cancellationToken);
-                _logger.LogInformation($"{likesNb} people liked you");
+                _logger.LogDebug($"{likesNb} people liked you");
 
                 ISet<string> teaserPhotoIds = await GetTeaserPhotoIds(cancellationToken);
                 await foreach (var teasedRec in GetTeasedRecommendations(teaserPhotoIds, cancellationToken))
@@ -57,7 +57,7 @@ namespace Tinder.AutoMatcher
                         _logger.LogError($"{teasedRec.UserInfo.Name} ({teasedRec.UserInfo.Id}) was not a match");
                 }
 
-                _logger.LogInformation("No more teased recommendations found. Pausing for 2 hours");
+                _logger.LogDebug("No more teased recommendations found. Pausing for 2 hours");
                 await Task.Delay(TimeSpan.FromHours(2), cancellationToken);
             }
         }
