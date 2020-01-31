@@ -26,7 +26,9 @@ namespace Tinder.Models
         [JsonPropertyName("type")]
         public string Type { get; set; } = default!;
         [JsonPropertyName("user")]
-        public UserRecommendation UserInfo { get; set; } = default!;
+        public UserRecommendation UserInfo { get; set; } = default!;        
+        [JsonPropertyName("instagram")]
+        public Instagram InstagramInfo { get; set; } = default!;
         [JsonPropertyName("facebook")]
         public Facebook FacebookInfo { get; set; } = default!;
         [JsonPropertyName("spotify")]
