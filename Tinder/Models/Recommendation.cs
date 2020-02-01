@@ -29,6 +29,10 @@ namespace Tinder.Models
         public UserRecommendation UserInfo { get; set; } = default!;
         [JsonPropertyName("facebook")]
         public Facebook FacebookInfo { get; set; } = default!;
+
+        [JsonPropertyName("instagram")]
+        public Instagram InstagramInfo { get; set; } = default!;
+
         [JsonPropertyName("spotify")]
         public Spotify SpotifyInfo { get; set; } = default!;
         [JsonPropertyName("distance_mi")]
