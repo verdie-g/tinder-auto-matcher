@@ -14,6 +14,12 @@ namespace Tinder.Models
         [JsonPropertyName("media_count")]
         public int MediaCount { get; set; }
 
+        [JsonPropertyName("profile_picture")]
+        public string ProfilePicture { get; set; } = default!;
+        [JsonPropertyName("username")]
+        public string UserName { get; set; } = default!;
+        [JsonPropertyName("should_reauthenticate")]
+        public Boolean ShouldReauthenticate { get; set; }
         public IReadOnlyList<Photos> CommonPhotos { get; set; } = default!;
         public class Photos
         {
