@@ -8,8 +8,7 @@ liking back people who liked you Tinder to create a match without having to swip
 send you an email everyday with recapitulation of today's matches.
 
 ## Usage
-- First you need your Tinder's authentication token. Log in to [tinder.com](https://tinder.com), open the developer console, filter by XHR
-  and find a request with an _X-Auth-Token_ header in the request headers. Save its value.
+- First you need your Tinder's authentication token. Log in to [tinder.com](https://tinder.com), open the developer console, type `localStorage.getItem("TinderWeb/APIToken")` and save the returned value.
 - Write the _X-Auth-Token_ value in the token key in Tinder.AutoMatcher/appsettings.json.
 - Install [.NET Core SDK 3.X](https://dotnet.microsoft.com/download).
 - Finally, `dotnet run -p Tinder.AutoMatcher` to launch the worker.
