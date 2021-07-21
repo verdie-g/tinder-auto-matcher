@@ -35,7 +35,7 @@ namespace Tinder.AutoMatcher
             }
             catch (Exception e)
             {
-                _logger.LogError(e.Message);
+                _logger.LogError(e, "An non-recoverable error occured");
                 _appLifetime.StopApplication();
             }
         }
