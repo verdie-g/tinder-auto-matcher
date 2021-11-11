@@ -40,7 +40,7 @@ namespace Tinder.Models
         [JsonPropertyName("content_hash")]
         public string ContentHash { get; set; } = default!;
         [JsonPropertyName("s_number")]
-        public int SNumber { get; set; }
+        public long SNumber { get; set; }
         [JsonPropertyName("teaser")]
         public Teaser TeaserInfo { get; set; } = default!;
         [JsonPropertyName("teasers")]
