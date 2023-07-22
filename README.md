@@ -1,5 +1,8 @@
 # Tinder Auto-Matcher
 
+**The Tinder API now returns server-side blurred pictures and no identifiers that could be matched**
+**to the unblurred pictures so this project doesn't work anymore.**
+
 <p align="center"><img src="https://user-images.githubusercontent.com/9092290/68415516-d6463600-0192-11ea-9820-ba391e4582f3.png"></p>
 
 ## Overview
